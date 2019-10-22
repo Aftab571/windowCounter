@@ -3,6 +3,7 @@
 }
 .leftcard{
     padding-left: 7%;
+
 }
 .rightcard{
     padding-left: 9%;
@@ -15,3 +16,27 @@
   position: fixed;
   padding-left: 35%;
 }
+.remov-border{
+    border: none !important;
+}
+.error{
+    color:red;
+    font-size:20px;
+    font-weight:500;
+
+}
+.back-img{
+    background-image: url("../../assets/wallper.jpg");
+}
+
+.space{
+    height: 215px;
+}
+.wincon{
+    font-size: 20px;
+    font-family: cursive;
+    font-weight: 500;
+}
+
+
+    

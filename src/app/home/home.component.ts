@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
 import { HttpClient, HttpEventType } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs';
@@ -9,7 +9,11 @@ import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+
 export class HomeComponent implements OnInit {
+
+  @ViewChild('myImage')
+  myInputVariable: any;
   fileData: File = null;
   previewUrl: any = null;
   fileUploadProgress: string = null;
@@ -26,23 +30,28 @@ export class HomeComponent implements OnInit {
   public webcamImage: WebcamImage = null;
   public errors: WebcamInitError[] = null;
   count = 3;
+  winCount=0;
+  err_msg=null;
+  public Data: any;
   // webcam snapshot trigger
   private trigger: Subject<void> = new Subject<void>();
   private nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
   // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
-
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
+    
+    
   }
 
   fileProgress(fileInput: any) {
-    this.fileData = <File>fileInput.target.files[0];
+    this.fileData = fileInput.target.files[0];
     this.preview();
   }
 
   preview() {
     // Show preview 
+    this.err_msg=null;
     this.previewUrl = null;
     var mimeType = this.fileData.type;
     if (mimeType.match(/image\/*/) == null) {
@@ -58,16 +67,30 @@ export class HomeComponent implements OnInit {
   }
   onSubmit() {
     const formData = new FormData();
-    formData.append('file', this.fileData);
-    this.http.post('url/to/your/api', formData)
-      .subscribe(res => {
+    formData.append('file', this.previewUrl);
+    this.http.post('http://127.0.0.1:5000/uploadimage', formData)
+      .subscribe((res:any) => {
+        this.err_msg=null;
         console.log(res);
-        //this.count = res.count;
-        //this.uploadedFilePath = res.data.filePath;
-        alert('SUCCESS !!');
+        console.log('data passed to backend')
+        var arr = res.Data.image.split(',')
+        var str = arr[1].replace(/'/g, "");
+        var resp = arr[0]+','+str.substring(1) 
+         this.previewUrl= resp;
+        // this.winCount = res.r;
+         this.winCount =  res.Data.count;
+        // this.upload"edFilePath = res.to_frontend.filePath;
+        //alert('SUCCESS !!');
+      },(error)=>{
+        //alert('Error !! server is down please try after sometime');
+        this.err_msg ="Please upload a valid image"
+        this.winCount=0;
+        window.scroll(0,0);
       })
   }
   onCamera() {
+    this.myInputVariable.nativeElement.value = "";
+    this.err_msg=null;
     this.webCam = true;
     this.previewUrl = null;;
   }

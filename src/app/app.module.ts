@@ -7,18 +7,25 @@ import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import {WebcamModule} from 'ngx-webcam';
+import { FormsModule } from '@angular/forms';
+import { FooterComponent } from './footer/footer.component';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    HomeComponent
+    HomeComponent,
+    FooterComponent,   
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    WebcamModule
+    WebcamModule,
+    FormsModule,
+    AngularFontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]
